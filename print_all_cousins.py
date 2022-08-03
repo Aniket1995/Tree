@@ -38,46 +38,60 @@ def construct(data):
 def is_leaf(root):
     return root != None and root.left == None and root.right == None
 
-def print_cousins(root,key):
+def getNodeLevel(root, key, lvl):
     if(root == None):
-        return 
-    q=[root,'#']
-    sub_index=-100000000
-    while(len(q) > 0):
-        lvl=''
-        while(q[0] != '#'):
-            n=q.pop(0)
-            
-            if(n == 'N'):
-                continue
-            
-            lvl+=str(n.data)
+        return -1
+    if(root.data == key):
+        return lvl
+    left = getNodeLevel(root.left,key,lvl+1)
+    if(left == -1):
+        right = getNodeLevel(root.right,key,lvl+1)
+        if(right == -1):
+            return -1
+        return right
+    return left
+        
 
-            if(n.left):
-                q.append(n.left)
-            else:
-                q.append('N')
+def print_cousins(root,key,lvl):
+    if(root == None or lvl == -1):
+        return
+    if(lvl > 1):
+        print_cousins(root.left,key,lvl-1)
+        print_cousins(root.right,key,lvl-1)
+    elif(lvl == 1):
+        if((root.left and root.left.data == key) or (root.right and root.right.data == key)):
+                return
+        if(root.left):
+            print(root.left.data,end=" ")
+        if(root.right):
+            print(root.right.data,end=" ")
 
-            if(n.right):
-                q.append(n.right)
-            else:
-                q.append('N')
 
-        q.append('#')
-    
-
-def main(data):
+def main(data,key):
     data=data.split()
     while('N' in data):
         data[data.index('N')] = '-1'
     data=[int(x) for x in data]
     root=construct(data)
-    # inorder(root)   
-    print('\nmid lvl')
-    print_cousins(root,4)
+    print()
+    inorder(root)
+    print('key:{0}'.format(key))
+    key_lvl = getNodeLevel(root,key,0)
+    print("key lvl:{0}".format(key_lvl))
+    print()
+    if(key_lvl != -1):
+        if(key_lvl == 0):
+            print('key is root so no cousins can be printed')
+        else:
+            print_cousins(root,key,key_lvl)
+    else:
+        print('key {0} not found'.format(key))
+    print()
 
-main("1 2 3 4 5 6 7")
-# main("1 2 3 4 5 2 N N N N N 4 5")
-# main("1 2 3 4 N 2 N N N 4 N")
-# main("27 41 11 5 26 45 46 16 10 12 7 15 30 11 28 48 32 28 18 32 3 N 7 36 5 39 12 47 32 30 23 17 45 13 22 20 45 36 23")
-# main("81 88 79 84 64 85 54 48 33 74 6 18 21 65 93 40 63 82 55 16 26 76 1 6 46 24 57 62 76 71 69 47 41 N 61 80 79 20 62 40 29 3 52 70 99 73 69 100 7 46 87 45 100 7 97 70 28 45 83")
+main("1 2 3 4 5 6 7",'4')
+main("1 2 3 4 5 6 7",'1')
+main("1 2 3 4 5 6 7",'2')
+main("1 2 3 4 5 6 7",'3')
+main("1 2 3 4 5 6 7",'5')
+main("1 2 3 4 5 6 7",'6')
+main("1 2 3 4 5 6 7",'7')
