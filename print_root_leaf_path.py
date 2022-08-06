@@ -59,25 +59,7 @@ def print_root_leaf_paths(root,s):
     if(root.left == None and root.right == None):
         print(s)
     print_root_leaf_paths(root.left,s)
-    print_root_leaf_paths(root.right,s)
-
-def print_root_leaf_paths_itr(root):
-    if(root == None):
-        return
-    s=[root]
-
-    while(len(s) > 0):
-        if(s[-1].left == None and s[-1].right == None):
-            print(" ".join(s))
-            s.pop()
-        if(s[-1] != None):
-            if(s[-1].right and s[-1].right not in s):
-                s.append(s[-1].right)
-            if(s[-1].left and s[-1].left not in s):
-                s.append(s[-1].left)
-            
-
-    
+    print_root_leaf_paths(root.right,s)    
 
 
 def print_root_leaf_path_for_key(root,s,key):
@@ -99,7 +81,6 @@ def main(data,key):
     print()
     inorder(root)
     print()
-    print_root_leaf_paths_itr(root)
 
 main("1 2 3 4 5 6 7","4")
 main("1 2 3 4 5 6 7","8")
