@@ -1,3 +1,6 @@
+from re import L
+
+
 class Node:
     def __init__(self,data):
         self.data=str(data)
@@ -50,24 +53,45 @@ def getNodeLevel(root, key, lvl):
             return -1
         return right
     return left
-        
+    
 
-def print_cousins(root,key,lvl):
-    if(root == None or lvl == -1):
-        return
-    if(lvl > 1):
-        print_cousins(root.left,key,lvl-1)
-        print_cousins(root.right,key,lvl-1)
-    elif(lvl == 1):
-        if((root.left and root.left.data == key) or (root.right and root.right.data == key)):
-                return
+def find_node_with_2_children(root):
+    if(root == None):
+        return root
+    if(root.left != None and root.right != None):
+        return root
+    left = find_node_with_2_children(root.left)
+    if(left == None):
+        right = find_node_with_2_children(root.right)
+        return right
+    return left
+
+def print_longest_path_left_leaf(root,s,flg):
+    if(root == None):
+        return ""
+    if(flg[0] == 0):
         if(root.left):
-            print(root.left.data,end=" ")
+            s = print_longest_path_left_leaf(root.left,s,flg)
+        elif(root.right):
+            s = print_longest_path_left_leaf(root.right,s,flg)
+        s += root.data + " "
+    else:
+        s += root.data + " "
         if(root.right):
-            print(root.right.data,end=" ")
+            s = print_longest_path_left_leaf(root.right,s,flg)
+        elif(root.left):
+            s = print_longest_path_left_leaf(root.left,s,flg)
+    return s
+    
 
+def print_longest_leaf_to_leaf_paths(root):
+    node_with_2_children=find_node_with_2_children(root)
+    print(print_longest_path_left_leaf(node_with_2_children,"",[0]),end="")
+    
+    print(print_longest_path_left_leaf(node_with_2_children,"",[1])[2:])
 
-def main(data,key):
+    
+def main(data):
     data=data.split()
     while('N' in data):
         data[data.index('N')] = '-1'
@@ -75,24 +99,8 @@ def main(data,key):
     root=construct(data)
     print()
     inorder(root)
-    print('key:{0}'.format(key))
-    key_lvl = getNodeLevel(root,key,0)
-    print("key lvl:{0}".format(key_lvl))
     print()
-    if(key_lvl != -1):
-        if(key_lvl == 0):
-            print('key is root so no cousins can be printed')
-        else:
-            print_cousins(root,key,key_lvl)
-    else:
-        print('key {0} not found'.format(key))
-    print()
+    print_longest_leaf_to_leaf_paths(root)
 
-main("1 2 3 4 5 6 7",'4')
-main("1 2 3 4 5 6 7",'1')
-main("1 2 3 4 5 6 7",'2')
-main("1 2 3 4 5 6 7",'3')
-main("1 2 3 4 5 6 7",'5')
-main("1 2 3 4 5 6 7",'6')
-main("1 2 3 4 5 6 7",'7')
-main("1 2 3 4 5 6 7",'70')
+main("1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20")
+main("1 2 3 4 5 -1 -1 -1 8 6 7 9")

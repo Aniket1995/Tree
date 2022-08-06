@@ -52,20 +52,43 @@ def getNodeLevel(root, key, lvl):
     return left
         
 
-def print_cousins(root,key,lvl):
-    if(root == None or lvl == -1):
-        return
-    if(lvl > 1):
-        print_cousins(root.left,key,lvl-1)
-        print_cousins(root.right,key,lvl-1)
-    elif(lvl == 1):
-        if((root.left and root.left.data == key) or (root.right and root.right.data == key)):
-                return
-        if(root.left):
-            print(root.left.data,end=" ")
-        if(root.right):
-            print(root.right.data,end=" ")
+def print_root_leaf_paths(root,s):
+    if(root == None):
+        return 
+    s += root.data + " "
+    if(root.left == None and root.right == None):
+        print(s)
+    print_root_leaf_paths(root.left,s)
+    print_root_leaf_paths(root.right,s)
 
+def print_root_leaf_paths_itr(root):
+    if(root == None):
+        return
+    s=[root]
+
+    while(len(s) > 0):
+        if(s[-1].left == None and s[-1].right == None):
+            print(" ".join(s))
+            s.pop()
+        if(s[-1] != None):
+            if(s[-1].right and s[-1].right not in s):
+                s.append(s[-1].right)
+            if(s[-1].left and s[-1].left not in s):
+                s.append(s[-1].left)
+            
+
+    
+
+
+def print_root_leaf_path_for_key(root,s,key):
+    if(root == None):
+        return 
+    s += root.data + " "
+    if(root.data == key):
+        print(s)
+        return 
+    print_root_leaf_path_for_key(root.left,s,key)
+    print_root_leaf_path_for_key(root.right,s,key)
 
 def main(data,key):
     data=data.split()
@@ -75,24 +98,11 @@ def main(data,key):
     root=construct(data)
     print()
     inorder(root)
-    print('key:{0}'.format(key))
-    key_lvl = getNodeLevel(root,key,0)
-    print("key lvl:{0}".format(key_lvl))
     print()
-    if(key_lvl != -1):
-        if(key_lvl == 0):
-            print('key is root so no cousins can be printed')
-        else:
-            print_cousins(root,key,key_lvl)
-    else:
-        print('key {0} not found'.format(key))
-    print()
+    print_root_leaf_paths_itr(root)
 
-main("1 2 3 4 5 6 7",'4')
-main("1 2 3 4 5 6 7",'1')
-main("1 2 3 4 5 6 7",'2')
-main("1 2 3 4 5 6 7",'3')
-main("1 2 3 4 5 6 7",'5')
-main("1 2 3 4 5 6 7",'6')
-main("1 2 3 4 5 6 7",'7')
-main("1 2 3 4 5 6 7",'70')
+main("1 2 3 4 5 6 7","4")
+main("1 2 3 4 5 6 7","8")
+main("1 2 3 4 5 -1 -1 -1 8 6 7 9","8")
+
+main("1 2 3 4 5 -1 -1 -1 8 6 7 9","9")
