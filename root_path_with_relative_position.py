@@ -35,14 +35,6 @@ def construct(data):
 
     return root
 
-def get_min_max_vertical_order(root,v,maxV,minV):
-    if(root == None):
-        return 
-    minV[0] = v if v < minV[0] else minV[0]
-    maxV[0] = v if v > maxV[0] else maxV[0]
-    get_min_max_vertical_order(root.left,v-1,maxV,minV)
-    get_min_max_vertical_order(root.right,v+1,maxV,minV)
-
 def is_leaf(root):
     return root != None and root.left == None and root.right == None
 
@@ -50,6 +42,7 @@ def print_relative_order(root,m,v):
     if(root == None):
         return
     m[root.data] = v
+    
     if(is_leaf(root)):
         minV = min(m.values())
         maxV = max(m.values())
