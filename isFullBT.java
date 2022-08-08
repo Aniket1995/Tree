@@ -8,6 +8,10 @@ class Node{
         this.data = data;
         this.left = this.right = null;
     }
+
+    public static Node formTree(Object object, int[] ia, int i) {
+        return null;
+    }
 }
 
 

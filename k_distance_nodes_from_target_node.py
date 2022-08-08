@@ -1,8 +1,3 @@
-import pathlib
-from tkinter.messagebox import NO
-from turtle import right
-
-
 class Node:
     def __init__(self,data):
         self.data=str(data)
