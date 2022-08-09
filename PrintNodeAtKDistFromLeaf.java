@@ -1,6 +1,8 @@
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.TreeMap;
 
 class TreeNode{
     public int data = 0;
@@ -101,20 +103,38 @@ public class PrintNodeAtKDistFromLeaf {
         printNodesAtKDistance(root.right, k, pathLen, path, visited, counter);
     }
 
+    public static void verticalOrder(TreeNode root, TreeMap<Integer,List<Integer>> map, int order){
+        if(root == null){
+            return ;
+        }
+        if(map.containsKey(order)){
+            map.get(order).add(root.data);
+        }else{
+            List<Integer> verticalOrder = new ArrayList<>();
+            verticalOrder.add(root.data);
+            map.put(order, verticalOrder);
+        }
+        verticalOrder(root.left, map, order-1);
+        verticalOrder(root.right, map, order+1);
+    }
+
     public static void main(String[] args) {
         int[] data = {1,2,3,4,5,6,7,8};
         int k = 1;
         TreeNode root = construct(data);
         inorder(root);
-        System.out.println();
+        // System.out.println();
         // leafPaths(root,"");
-        int[] path = new int[1000];
-        boolean[] visited = new boolean[1000];
-        System.out.println("height: "+height(root));
-        int[] counter = new int[1];
+        // int[] path = new int[1000];
+        // boolean[] visited = new boolean[1000];
+        // System.out.println("height: "+height(root));
+        // int[] counter = new int[1];
 
-        printNodesAtKDistance(root, k, 0, path, visited, counter);
-        print(counter[0]);
+        // printNodesAtKDistance(root, k, 0, path, visited, counter);
+        // print(counter[0]);
+        TreeMap<Integer,List<Integer>> map = new TreeMap<>();
+        verticalOrder(root, map, 0);
+        System.out.println(map);
     }
 
     
