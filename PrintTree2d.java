@@ -9,8 +9,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 
-import javax.swing.plaf.synth.SynthStyle;
-
 class TreeNode {
     public int data = 0;
     public TreeNode left = null;
