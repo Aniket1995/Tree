@@ -1,6 +1,6 @@
 class Node:
     def __init__(self,data):
-        self.data=str(data)
+        self.data=int(data)
         self.left=None
         self.right=None
 
@@ -21,13 +21,13 @@ def construct(data):
     while(len(q) > 0):
         n=q.pop(0)
         if(n.left == None and len(data) > 0):
-            if(data[0] != -1):
+            if(data[0] != '-1'):
                 n.left=Node(data.pop(0))
                 q.append(n.left)
             else:
                 data.pop(0)
         if(n.right == None and len(data) > 0):
-            if(data[0] != -1):
+            if(data[0] != '-1'):
                 n.right=Node(data.pop(0))
                 q.append(n.right)
             else:
@@ -44,7 +44,7 @@ def merge(a,b,ch):
     if(b is None):
         return a
     for i in range(0,len(b)):
-        if(b[i] == ch and a[i] != ch):
+        if(str(b[i]) == ch and a[i] != ch):
             b[i] = a[i]
 
 def build_level_map(root,m,in_order,lvl,ch):
@@ -54,7 +54,7 @@ def build_level_map(root,m,in_order,lvl,ch):
     # if(lvl > 0):
     #     ch = ch*2
     for i in in_order:
-        curr.append(i if i == root.data else ch)
+        curr.append(str(i) if i == root.data else ch)
     if(lvl not in m):
         m[lvl] = curr
     else:
@@ -62,15 +62,8 @@ def build_level_map(root,m,in_order,lvl,ch):
     
     build_level_map(root.left,m,in_order,lvl+1,ch)
     build_level_map(root.right,m,in_order,lvl+1,ch)
-    
 
-def main(data,ch):
-    data=data.split()
-    while('N' in data):
-        data[data.index('N')] = '-1'
-    data=[int(x) for x in data]
-    root=construct(data)
-    print()
+def visualize(root, ch):
     in_order=[]
     inorder(root,in_order)
     print()
@@ -78,13 +71,21 @@ def main(data,ch):
     build_level_map(root,m,in_order,0,ch)
     # print(m)
     for k,v in m.items():
-        print("".join(v))
+        print("".join(v)) 
+
+def main(data,ch):
+    data=data.split()
+    while('N' in data):
+        data[data.index('N')] = '-1'
+    # data=[int(x) for x in data]
+    root=construct(data)
+    visualize(root, ch)
     
 
-main("1 2 3 4 5 6 7 8 9 12 N N N N N N N 13 14 N 11 N N 15", "_")
+# main("1 2 3 4 5 6 7 8 9 12 N N N N N N N 13 14 N 11 N N 15", "_")
 # main("7 5 8 2 6 N 56 1 3 N N 10 57 N N N 4 9 51 N N N N N N 13 52 12 45 N 55 11 N 20 49 54 N N N 15 44 48 50 53 N 14 18 23 N 46 N N N N N N N 16 19 21 30 N 47 N 17 N N N 22 28 34 N N N N N N 24 29","__")
 # main("1 2 3 4 5 -1 -1 -1 8 6 7 9"," ")
 # main("1 2 3 -1 -1 4 5 8 -1 6 7 -1 9"," ")
 # main("1 2 3 4 5 6 7 8 9 10 11 12 13 14 15"," ")
 # main("1 -1 2 -1 3 -1 4 -1"," ")
-# main("1 2 -1 3 -1 4 -1"," ")
+# main("1 2 -1 3 -1 4 -1","_")
