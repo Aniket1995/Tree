@@ -15,12 +15,12 @@ def height(root):
         return 0
     return root.height
 
-def inorder(root,res):
+def populate_inorder(root,res):
     if(root == None):
         return
-    inorder(root.left,res)
+    populate_inorder(root.left,res)
     res.append(root.data)
-    inorder(root.right,res)
+    populate_inorder(root.right,res)
 
 def merge(a,b,ch):
     if(a is None):
@@ -35,8 +35,6 @@ def build_level_map(root,m,in_order,lvl,ch):
     if(root == None):
         return None
     curr=[]
-    # if(lvl > 0):
-    #     ch = ch*2
     for i in in_order:
         curr.append(str(i)+"({0})".format(root.height) if i == root.data else ch)
     if(lvl not in m):
@@ -49,11 +47,10 @@ def build_level_map(root,m,in_order,lvl,ch):
 
 def visualize(root, ch):
     in_order=[]
-    inorder(root,in_order)
+    populate_inorder(root,in_order)
     print()
     m={}
     build_level_map(root,m,in_order,0,ch)
-    # print(m)
     for k,v in m.items():
         print("".join(v)) 
 
