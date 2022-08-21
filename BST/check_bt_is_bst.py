@@ -11,10 +11,10 @@ def is_bst(root,min_,max_):
         return True
     if(min_ > root.data or root.data > max_):
         return False
-    if(root.left and root.data < root.left.data):
-        return False
-    if(root.right and root.data > root.right.data):
-        return False
+    # if(root.left and root.data < root.left.data):
+    #     return False
+    # if(root.right and root.data > root.right.data):
+    #     return False
     return is_bst(root.left, min_, root.data) and is_bst(root.right, root.data, max_)
 
 def isBST(root):
